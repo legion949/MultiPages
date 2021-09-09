@@ -1,0 +1,13 @@
+name: MultiPages
+title: MultiPages
+username:
+account: thugchem
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4621010
+bundleId: 5016406
+url: https://thugchem.shinyapps.io/MultiPages/
+when: 1631202571.22361
+lastSyncTime: 1631202571.22361
+asMultiple: FALSE
+asStatic: FALSE
