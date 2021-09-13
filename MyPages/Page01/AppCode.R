@@ -1,32 +1,29 @@
-library(shiny)
-
 # Define UI for app that draws a histogram ----
-ui <- fluidPage(
+
+shiny_options <- c(1:3)
+names(shiny_options) <- c(1:3)
+
+fluent_options <- OptS2F(shiny_options)
+
+ui <- semanticPage(
 
   # App title ----
-  titlePanel("Bienvenido la pagina de MLG!"),
+ # titlePanel("App 01 - La intro de capuccino! - COdigo de la APP"),
 
   # Sidebar layout with input and output definitions ----
-  sidebarLayout(
+ # sidebarLayout(
 
     # Sidebar panel for inputs ----
-    sidebarPanel(
+   # sidebarPanel(
+
+
 
       # Input: Slider for the number of bins ----
       "Page 01 - SideBarPanel",
-      radioButtons("selector_page02", "Selector Pagina 2", c(10:13))
-
-    ),
-
-    # Main panel for displaying outputs ----
-    mainPanel(
-
-      # Output: Histogram ----
-      plotOutput(outputId = "distPlot_pagina2")
-
+ ChoiceGroup.shinyInput("choice_App1", value = 1, options = fluent_options),
+ plotOutput("distPlot_App01")
     )
-  )
-)
+
 
 # Define server logic required to draw a histogram ----
 server <- function(input, output, session) {
@@ -39,11 +36,14 @@ server <- function(input, output, session) {
   # 1. It is "reactive" and therefore should be automatically
   #    re-executed when inputs (input$bins) change
   # 2. Its output type is a plot
-  output$distPlot_pagina2 <- renderPlot({
+  output$distPlot_App01 <- renderPlot({
     plot(iris, col ="blue")
   })
 
 }
+
+
+
 
 # Create Shiny app ----
 # # # shinyApp(ui = ui, server = server)

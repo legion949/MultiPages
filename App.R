@@ -1,21 +1,31 @@
 library(shiny)
 library(shiny.router)
+library(shiny.semantic)
+library(semantic.dashboard)
+library(bslib)
+library(plotly)
+library(DT)
 source("lib.R")
 
 
 # This generates menu in user interface with links.
 menu <- (
+
   tags$ul(
     tags$li(a(class = "item", href = route_link("/"), "Pagina Principal - Cappuchino")),
-    tags$li(a(class = "item", href = route_link("Pagina01"), "Pagina01 - RMedic")),
-    tags$li(a(class = "item", href = route_link("Pagina02"), "Pagina02 - MLG")),
-    tags$li(a(class = "item", href = route_link("Pagina03"), "Pagina03 - Qué querés???"))
+    tags$li(a(class = "item", href = route_link("Pagina02"), "Pagina02 - RMedic")),
+    tags$li(a(class = "item", href = route_link("Pagina03"), "Pagina03 - Uchikomi")),
+    img(src = "capuccino.png", height="300p", width="300p", align="c" )
   )
+
+
 )
 
 
-Code01 <- TakeMyCode(input_dir = "Page01")
-Code02 <- TakeMyCode(input_dir = "Page02")
+Code01 <- TakeMyCode(input_dir = "MyPages", input_subdir = "Page01", input_file =  "AppCode")
+Code02 <- TakeMyCode(input_dir = "MyPages", input_subdir = "Page02", input_file =  "AppCode")
+Code03 <- TakeMyCode(input_dir = "MyPages", input_subdir = "Page03", input_file =  "AppCode")
+
 
 # This creates UI for each page.
 page <- function(title, content, table_id) {
@@ -40,7 +50,6 @@ page3 <- function(title, content,...) {
 
 page2 <- function(title, content, ...) {
   div(
-    br(),
     menu,
    # titlePanel(title),
   p(content),
@@ -50,50 +59,31 @@ page2 <- function(title, content, ...) {
 }
 
 # Both sample pages.
-root_page <- page3("Pagina Principal", "Bienvenido a la página principal la CONSULTORA")
-other_page <- page2("Pagina 01", "Aca va la App01 - RMedic!",Code01$ui)
-# third_page <- div(menu, titlePanel("Pagina02 - Nada! En construccion!"))
-third_page <- page2("Pagina 02", "Aca va la App02 - MLG!",Code02$ui)
-my_page <- page("Pagina 03", "Que querés acá??????", "table_tree")
-
-# Callbacks on the server side for
-# the sample pages
-root_callback <- function(input, output, session) {
-  output$table_one <- renderDataTable({
-    data.frame(x = c(1, 2), y = c(3, 4))
-  })
-}
-
-other_callback <- Code01$server
-
-third_page_callback <- Code02$server
-
-mypage_callback <- function(input, output, session) {
-  output$table_tree <- renderDataTable({
-    # data.frame(x = c(5, 6), y = c(7, 8))
-    mtcars
-  })
-
-  output$graph_tree <- renderPlot({
-    # data.frame(x = c(5, 6), y = c(7, 8))
-    plot(mtcars)
-  })
+page_ui01 <- page2("Pagina Principal", "Bienvenido a la página principal la CONSULTORA", Code01$ui)
+page_ui02 <- page2("Pagina 02", "Aca va la App02 - RMedic!",Code02$ui)
+page_ui03 <- page2("Pagina 03", "Aca va la App03 - Uchikomi!",Code03$ui)
 
 
-}
+
+
+
+
+
 
 # Creates router. We provide routing path, a UI as
 # well as a server-side callback for each page.
 router <- make_router(
-  route("/", root_page, root_callback),
-  route("Pagina01", other_page, other_callback),
+  route("/", page_ui01, Code01$server),
+  route("Pagina02",  page_ui02, Code02$server),
+  route("Pagina03",  page_ui03, Code03$server)
  # route("Pagina02", third_page, NA),
- route("Pagina02", third_page, third_page_callback),
-  route("Pagina03", my_page, mypage_callback)
 )
 
 # Make output for our router in main UI of Shiny app.
 ui <- shinyUI(fluidPage(
+#  theme = "main.css",
+ # theme = bs_theme(version = 4),
+ # theme = bs_theme(bootswatch = "solar"),
   router$ui
 ))
 
